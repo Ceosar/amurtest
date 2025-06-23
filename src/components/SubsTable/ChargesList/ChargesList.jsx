@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 
 //ui
 import {
@@ -10,6 +10,9 @@ import {
 //redux
 import { useSelector } from "react-redux";
 
+//utils
+import { AlertContext } from "../../../utils/AlertProvider";
+
 /**
  * Таблица начислений
  * @param {*} param.subscrId -идентификатор выбранного ЛС
@@ -19,7 +22,17 @@ const ChargesList = ({ subscrId }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const { charges, loading } = useSelector(state => state.charges);
+    const { showAlert } = useContext(AlertContext);
+
+    const { charges, loading, error } = useSelector(state => state.charges);
+
+
+    useEffect(() => {
+        if (error) {
+            showAlert(error, 'error', 5000);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [error]);
 
     const tableCelStyles = {
         fontSize: isMobile ? '0.75rem' : '0.875rem',

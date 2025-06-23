@@ -73,12 +73,15 @@ const SubsTable = () => {
     }
 
     useEffect(() => {
-        if (error?.includes('Время сессии закончилось')) {
+        if (error) {
             showAlert(error, 'error', 5000);
-            dispatch(logout());
-            navigate('/login');
+            if (error.includes('Время сессии закончилось')) {
+                dispatch(logout());
+                navigate('/login');
+            }
         }
-    }, [error, showAlert, dispatch, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [error]);
 
     const subsTableContainerStyles = {
         display: 'flex',

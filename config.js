@@ -1,2 +1,2 @@
 // main api endpoint
-export const apiUrl = 'https://testtest.ru'
+export const apiUrl = 'https://testlkamur.dvec.ru'

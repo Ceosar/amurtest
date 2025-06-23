@@ -40,12 +40,15 @@ const PaymentsList = ({ subscrId }) => {
     const currentPayments = payments[subscrId] || [];
 
     useEffect(() => {
-        if (error?.includes('Время сессии закончилось')) {
+        if (error) {
             showAlert(error, 'error', 5000);
-            dispatch(logout());
-            navigate('/login');
+            if (error.includes('Время сессии закончилось')) {
+                dispatch(logout());
+                navigate('/login');
+            }
         }
-    }, [error, showAlert, dispatch, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [error]);
 
     const tableCelStyles = {
         fontSize: isMobile ? '0.75rem' : '0.875rem',
