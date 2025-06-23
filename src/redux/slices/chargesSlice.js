@@ -7,7 +7,6 @@ export const fetchCharges = createAsyncThunk(
         try {
             const { auth } = getState();
             const response = await requestCharges(auth.token, period.begin, period.end);
-
             if (!response.success) {
                 if (response.msg.includes('повторите авторизацию')) {
                     // return response.msg

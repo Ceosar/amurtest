@@ -6,10 +6,10 @@ import App from './App.jsx'
 import { Provider } from 'react-redux'
 import { store } from './redux/store'
 
-const token = localStorage.getItem('authToken');
-if (token) {
-  store.dispatch({ type: 'auth/setToken', payload: token });
-}
+//utils
+import { initAuth } from './utils/initAuth.js'
+
+initAuth(store);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

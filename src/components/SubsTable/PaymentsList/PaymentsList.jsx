@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import { useNavigate } from "react-router";
 
 //redux
-import { useSelector } from "react-redux";
+import { logout } from "../../../redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 //ui
 import {
@@ -18,6 +20,7 @@ import {
 
 //utils
 import { formatDate } from "../../../utils/formatDates";
+import { AlertContext } from "../../../utils/AlertProvider";
 
 /**
  * Список платежей
@@ -28,8 +31,21 @@ const PaymentsList = ({ subscrId }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const { payments, loading } = useSelector(state => state.payments);
+    const dispatch = useDispatch()
+    const navigate = useNavigate();
+
+    const { showAlert } = useContext(AlertContext);
+
+    const { payments, loading, error } = useSelector(state => state.payments);
     const currentPayments = payments[subscrId] || [];
+
+    useEffect(() => {
+        if (error?.includes('Время сессии закончилось')) {
+            showAlert(error, 'error', 5000);
+            dispatch(logout());
+            navigate('/login');
+        }
+    }, [error, showAlert, dispatch, navigate]);
 
     const tableCelStyles = {
         fontSize: isMobile ? '0.75rem' : '0.875rem',
@@ -51,7 +67,6 @@ const PaymentsList = ({ subscrId }) => {
             height: '4px'
         }
     }
-
 
     return (
         <TableContainer sx={tableContainerStyles}>

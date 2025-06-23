@@ -13,7 +13,9 @@ import {
     Typography,
     Paper,
     useTheme,
-    useMediaQuery
+    useMediaQuery,
+    Tabs,
+    Tab
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
@@ -28,6 +30,8 @@ import PaymentsList from "./PaymentsList/PaymentsList";
 
 // Utils
 import { AlertContext } from "../../utils/AlertProvider";
+import ChargesList from "./ChargesList/ChargesList";
+import { fetchCharges } from "../../redux/slices/chargesSlice";
 
 /**
  * Таблица лицевых счетов
@@ -44,6 +48,7 @@ const SubsTable = () => {
     const { subscriptions, error } = useSelector(state => state.subs);
     const { showAlert } = useContext(AlertContext);
     const [expanded, setExpanded] = useState(null);
+    const [tableType, setTableType] = useState('charges');
 
     /**
      * Выбор лицевого счета
@@ -59,7 +64,11 @@ const SubsTable = () => {
      */
     const handleOnPeriodChange = (period) => {
         if (expanded) {
-            dispatch(fetchPayments({ period, subscrId: expanded }));
+            if(tableType === "charges"){
+                dispatch(fetchCharges({period}))
+            } else{
+                dispatch(fetchPayments({ period, subscrId: expanded }));
+            }
         }
     }
 
@@ -84,6 +93,15 @@ const SubsTable = () => {
         minWidth: 300,
         borderRadius: isMobile ? null : 2,
         overflow: 'hidden'
+    }
+
+    /**
+     * Выбор типа таблицы
+     * @param {*} _event
+     * @param {*} newValue
+     */
+    const handleTypeChange = (_event, newValue) => {
+        setTableType(newValue);
     }
 
     return (
@@ -119,7 +137,7 @@ const SubsTable = () => {
                             }}
                         >
                             <ListItem
-                                button
+                                button = "true"
                                 onClick={() => handleSelectSub(subs)}
                                 sx={{
                                     transition: 'background-color 0.3s',
@@ -142,13 +160,25 @@ const SubsTable = () => {
                                 <Box sx={{
                                     display: 'flex',
                                     width: '100%',
-                                    gap: 2,
+                                    gap: 1,
                                     p: 1,
                                     flexDirection: 'column',
                                     bgcolor: 'background.paper'
                                 }}>
                                     <MouthPicker onPeriodChange={handleOnPeriodChange}/>
-                                    <PaymentsList subscrId={subs.SubscrId}/>
+                                    <Tabs
+                                        value={tableType}
+                                        onChange={handleTypeChange}
+                                        variant="fullWidth"
+                                        sx={{ mb: 3 }}>
+                                        <Tab label="Начисления" value={'charges'}/>
+                                        <Tab label="Платежи" value={'payments'}/>
+                                    </Tabs>
+                                    {tableType === 'charges' ? (
+                                        <ChargesList subscrId={subs.SubscrId}/>
+                                    ):(
+                                        <PaymentsList subscrId={subs.SubscrId}/>
+                                    )}
                                 </Box>
                             </Collapse>
                         </Box>

@@ -3,6 +3,11 @@ import { Alert, Snackbar } from '@mui/material';
 
 export const AlertContext = createContext();
 
+/**
+ * Провайдер для работы с алертами
+ * @param {*} param.children - контент внутри обертки
+ * @returns 
+ */
 export const AlertProvider = ({ children }) => {
     const [alert, setAlert] = useState(null);
 
@@ -10,6 +15,9 @@ export const AlertProvider = ({ children }) => {
         setAlert({ message, severity, duration });
     };
 
+    /**
+     * Закрытие алерта
+     */
     const handleClose = () => {
         setAlert(null);
     };
