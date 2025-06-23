@@ -5,7 +5,7 @@ import { apiUrl } from './config'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/amurtest/',
+  base: '/amurtest',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
