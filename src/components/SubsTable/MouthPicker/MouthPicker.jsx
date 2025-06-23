@@ -85,13 +85,17 @@ const MouthPicker = ({onPeriodChange}) => {
                 onChange={(date) => handleBeginChange(date)}
                 views={['year', 'month']}
                 slotProps={datePickerSlotStyles}
-                />
+                minDate={dayjs('2015-01-01')}
+                maxDate={dayjs('2025-12-31')}
+            />
             <DatePicker
                 label="Конец периода"
                 views={['year', 'month']}
                 onChange={(date) => handleEndChange(date)}
                 value={period.periodEnd}
                 slotProps={datePickerSlotStyles}
+                minDate={dayjs('2015-01-01')}
+                maxDate={dayjs('2025-12-31')}
             />
         </Box>
     );
